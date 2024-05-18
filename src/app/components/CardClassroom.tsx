@@ -30,7 +30,7 @@ const CardClassroom: React.FC<CardClassroomProps> = ({ classes }) => {
       <ul className="grid grid-cols-2 gap-4">
         {classes.map((kelas) => (
           <li className="" key={kelas.id}>
-            <Link href={`/dashboard/${kelas.id}`}>
+            <Link href={`/dashboard/student/${kelas.id}`}>
               {/* card room */}
               <CardRoom
                 className={kelas.name}

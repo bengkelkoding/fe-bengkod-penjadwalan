@@ -1,7 +1,11 @@
 import React from "react";
-import CardProfile from "../components/CardProfile";
-import CardClassroom from "../components/CardClassroom";
-import ButtomNavigation from "../components/ButtomNavigation";
+// import CardProfile from "../components/CardProfile";
+// import CardClassroom from "../components/CardClassroom";
+// import ButtomNavigation from "../components/ButtomNavigation";
+
+import CardProfile from "@/app/components/CardProfile";
+import CardClassroom from "@/app/components/CardClassroom";
+import ButtomNavigation from "@/app/components/ButtomNavigation";
 
 export default function DashboardPage() {
   const userData = {
