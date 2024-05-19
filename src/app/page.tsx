@@ -1,7 +1,11 @@
 import Link from "next/link";
 import Masuk from "./masuk/page";
 const Login = () => {
-  return <>masuk</>;
+  return (
+    <>
+      <Masuk />
+    </>
+  );
 };
 
 export default Login;
