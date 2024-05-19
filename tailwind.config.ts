@@ -19,6 +19,7 @@ const config: Config = {
     require("flowbite/plugin")({
       charts: true,
     }),
+    require("@tailwindcss/forms"),
   ],
 };
 export default config;
