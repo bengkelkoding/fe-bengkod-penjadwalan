@@ -7,7 +7,7 @@ export default function page() {
     <>
       {/* list kelas */}
       <h2 className="bg-white my-5 px-2 rounded-full text-sm ">Daftar Kelas</h2>
-      <ul className="grid grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {dataLclassroom.map((kelas) => (
           <li className="" key={kelas.id}>
             <Link href={`/dashboard/lecture/room/${kelas.id}`}>
