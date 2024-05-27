@@ -3,6 +3,8 @@ import dataLclassroom from "../../../../../public/utils/dataLectureClass";
 import LectureCardClassroom from "@/app/components/lecture/LectureClass/LectureCardClassroom";
 import Link from "next/link";
 export default function page() {
+  const warna = ["#FF8C00", "#8A2BE2", "#7CFC00", "#FFD700", "#00FA9A"];
+  console.log("Isi array warna:", warna);
   return (
     <>
       {/* list kelas */}
@@ -20,6 +22,7 @@ export default function page() {
                 ClassStudentCount={kelas.studentCount}
                 ClassMeetings={kelas.meetings}
                 ClassMeetingsStatus={kelas.meetingsStatus}
+                ClassBg={"#ffffff"}
               />
             </Link>
           </li>
