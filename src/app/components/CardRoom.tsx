@@ -12,17 +12,7 @@ interface CardRoomProps {
   LecturePhone: string;
 }
 
-const CardRoom: React.FC<CardRoomProps> = ({
-  className,
-  classPlace,
-  classDay,
-  classTime,
-  group_code,
-  sks,
-  LectureName,
-  LectureNip,
-  LecturePhone,
-}) => {
+const CardRoom: React.FC<CardRoomProps> = ({ className, classPlace, classDay, classTime, group_code, sks, LectureName, LectureNip, LecturePhone }) => {
   return (
     <div className="w-full h-40 p-3 rounded-lg bg-white text-white  flex flex-col gap-3 font-semibold shadow-md">
       {/* hari */}

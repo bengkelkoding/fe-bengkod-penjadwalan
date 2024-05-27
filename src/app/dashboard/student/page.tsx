@@ -11,8 +11,7 @@ export default function DashboardPage() {
   const userData = {
     name: "Muhammad Sumbul",
     nimMhs: "A11.2021.12345",
-    linkImg:
-      "https://i.pinimg.com/originals/f5/8a/ac/f58aacd2cddf1a32e2701ba767184f3c.jpg",
+    linkImg: "https://i.pinimg.com/originals/f5/8a/ac/f58aacd2cddf1a32e2701ba767184f3c.jpg",
   };
 
   const classData = [
@@ -92,14 +91,8 @@ export default function DashboardPage() {
 
   return (
     <div className="px-4 pb-24 bg-slate-100 w-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
-      <p className="font-extralight rounded-br-[15px] rounded-bl-[15px] bg-blue-900 text-white text-2xl pt-2 pb-12 px-8 -mx-4">
-        Home
-      </p>
-      <CardProfile
-        name={userData.name}
-        nimMhs={userData.nimMhs}
-        linkImg={userData.linkImg}
-      />
+      <p className="font-extralight rounded-br-[15px] rounded-bl-[15px] bg-blue-900 text-white text-2xl pt-2 pb-12 px-8 -mx-4">Home</p>
+      <CardProfile name={userData.name} nimMhs={userData.nimMhs} linkImg={userData.linkImg} />
       <CardClassroom classes={classData} />
       <ButtomNavigation />
     </div>
