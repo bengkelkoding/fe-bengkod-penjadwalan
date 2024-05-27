@@ -9,6 +9,7 @@ interface LectureCardClassroomProps {
   ClassMeetings: number;
   ClassMeetingsStatus: "Sesuai" | "Kurang";
   ClassGroupCode: string;
+  ClassBg: string;
 }
 
 const LectureCardClassroom = ({
@@ -19,9 +20,14 @@ const LectureCardClassroom = ({
   ClassMeetings,
   ClassMeetingsStatus,
   ClassGroupCode,
+  ClassBg,
 }: LectureCardClassroomProps) => {
+  console.log("tes ", ClassBg);
   return (
-    <div className="w-full min-h-[25vh] flex justify-between bg-white shadow-lg p-3 rounded-lg">
+    <div
+      className="w-full min-h-[25vh] flex justify-between shadow-lg p-5 rounded-lg"
+      style={{ backgroundColor: ClassBg }}
+    >
       <div className="left-data">
         <h2 className="font-medium text-xl">{ClassName}</h2>
         <p className="mt-3">Kode Matkul : {ClassGroupCode}</p>
