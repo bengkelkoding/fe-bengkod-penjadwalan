@@ -26,7 +26,7 @@ const DataIzin: React.FC<DataIzinProps> = ({ className, dateIzin, classTime, cla
       <div className="font-semibold text-center rounded-xl text-white ">
         <p className={`${colors[statusIzin]} text-sm  px-3 py-2 rounded-tr-xl rounded-bl-xl rounded-sm`}>{statusIzin}</p>
         {statusIzin === "Rejected" && (
-          <a href="">
+          <a href="/dashboard/student/riwayat/formizin">
             <p className="text-blue-900 underline text-sm font-normal text-[13.5px] px-3 mt-9">Ajukan Kembali</p>
           </a>
         )}

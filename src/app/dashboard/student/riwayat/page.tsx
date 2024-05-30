@@ -166,10 +166,10 @@ export default function RiwayatPage() {
   ];
 
   return (
-    <div className="px-4 bg-slate-300 w-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto overflow-y-auto">
-      <p className="text-center font-semibold rounded-br-[35px] rounded-bl-[35px] bg-blue-900 text-white text-2xl py-5 px-8  -mx-4">Riwayat</p>
+    <div className="flex flex-col min-h-screen px-4 bg-slate-300 w-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
+      <p className="text-center font-semibold rounded-br-[35px] rounded-bl-[35px] bg-blue-900 text-white text-2xl py-5 px-8 -mx-4">Riwayat</p>
       <div className="bg-slate-200 px-4 pt-2 pb-4 mt-8 rounded-3xl mb-[100px]">
-        <div className="flex justify-center mt-6 gap-2">
+        <div className="flex text-center justify-center mt-6 gap-2">
           <p className={`font-semibold px-5 py-2  text-sm rounded-3xl ${activeTab === "riwayatAbsen" ? "bg-blue-900 text-white" : "bg-white text-blue-900"} cursor-pointer`} onClick={() => setActiveTab("riwayatAbsen")}>
             Riwayat Kehadiran
           </p>
