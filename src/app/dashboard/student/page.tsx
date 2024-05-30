@@ -2,7 +2,6 @@ import React from "react";
 // import CardProfile from "../components/CardProfile";
 // import CardClassroom from "../components/CardClassroom";
 // import ButtomNavigation from "../components/ButtomNavigation";
-
 import CardProfile from "@/app/components/CardProfile";
 import CardClassroom from "@/app/components/CardClassroom";
 import ButtomNavigation from "@/app/components/ButtomNavigation";
@@ -91,7 +90,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="px-4 pb-24 bg-slate-100 w-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
+    <div className="px-4 pb-24 bg-red-300 w-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
       <p className="font-extralight rounded-br-[15px] rounded-bl-[15px] bg-blue-900 text-white text-2xl pt-2 pb-12 px-8 -mx-4">
         Home
       </p>

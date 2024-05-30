@@ -8,7 +8,6 @@ interface dataLecturClass {
   meetingsStatus: "Sesuai" | "Kurang";
   groupCode: string;
   sks: number;
-  bgsession: string;
 }
 
 const dataLclassroom: dataLecturClass[] = [
@@ -22,7 +21,7 @@ const dataLclassroom: dataLecturClass[] = [
     meetingsStatus: "Sesuai",
     groupCode: "TI2021A",
     sks: 4,
-    bgsession: "#FF8C00",
+    // bgsession: "#FF8C00",
   },
   {
     id: "2",
@@ -34,7 +33,7 @@ const dataLclassroom: dataLecturClass[] = [
     meetingsStatus: "Kurang",
     groupCode: "TI2020B",
     sks: 4,
-    bgsession: "#FF8C00",
+    // bgsession: "#FF8C00",
   },
   {
     id: "3",
@@ -46,7 +45,7 @@ const dataLclassroom: dataLecturClass[] = [
     meetingsStatus: "Sesuai",
     groupCode: "TI2019C",
     sks: 4,
-    bgsession: "#FF8C00",
+    // bgsession: "#FF8C00",
   },
   {
     id: "4",
@@ -58,7 +57,7 @@ const dataLclassroom: dataLecturClass[] = [
     meetingsStatus: "Sesuai",
     groupCode: "TI2021D",
     sks: 4,
-    bgsession: "#FF8C00",
+    // bgsession: "#FF8C00",
   },
   {
     id: "5",
@@ -70,7 +69,7 @@ const dataLclassroom: dataLecturClass[] = [
     meetingsStatus: "Kurang",
     groupCode: "TI2020E",
     sks: 4,
-    bgsession: "#FF8C00",
+    // bgsession: "#FF8C00",
   },
 ];
 
