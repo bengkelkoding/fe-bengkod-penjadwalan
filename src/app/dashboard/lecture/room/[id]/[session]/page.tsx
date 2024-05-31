@@ -1,4 +1,5 @@
 "use client";
+import { ApiCreateQrCodeLecture } from "@/app/api/LectureCreateQrCode";
 import { ApiLectureSchedule } from "@/app/api/LectureSchedule";
 import { ApiDetailLectureSchedule } from "@/app/api/LectureScheduleDetail";
 import ListTableMhs from "@/app/components/lecture/LectureClass/ListTableMhs";
@@ -35,10 +36,8 @@ interface SessionProps {
 }
 
 const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
-  // bikin 1. get api kelas di id params.
+  // get url information
   const { id } = useParams();
-
-  // bandingkan dengan id yang di presence
   const { session } = useParams();
 
   // data classRoom
@@ -64,11 +63,23 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
         if (element) {
           setScheduleData(element);
         }
+        // ----------------------
 
         const dataDetail = await ApiDetailLectureSchedule(id.toString());
         const dataPresences = dataDetail.payload.presences;
-        console.log("presen session", dataPresences);
+        console.log("presen session 1", dataPresences);
         setDataSession(dataPresences);
+
+        // -----------------------
+        console.log("1 qr session");
+
+        // const qrGenerateApi = await ApiCreateQrCodeLecture(
+        //   id.toString(),
+        //   session.toString()
+        // );
+        // const dataQr = qrGenerateApi.payload;
+        // const qrValue = dataQr.qr_code;
+        // console.log("qr session", dataQr.qr_code);
       } catch (error) {
         console.error("Error fetching schedules:", error);
       }
@@ -78,21 +89,33 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // get data schedule : dosen,matkul,nip, kode dll...
   useEffect(() => {
     if (scheduleData) {
       console.log("final", scheduleData);
     }
   }, [scheduleData]);
 
+  // QR CODE
+  // API QRCODE => id/session
+
   const [qrText, setQrText] = useState<string>("");
   const [i, setI] = useState<number>(1);
   const [countdown, setCountdown] = useState<number>(20);
 
-  const generateRandomText = () => {
-    const randomText = `tes-absenpertemuan-${i}`;
-    setI(i + 1);
-    setQrText(randomText);
-    console.log(randomText);
+  const generateRandomText = async () => {
+    try {
+      const qrGenerateApi = await ApiCreateQrCodeLecture(
+        id.toString(),
+        session.toString()
+      );
+      const dataQr = qrGenerateApi.payload;
+      const newQrValue = dataQr.qr_code;
+      console.log("qr session", newQrValue);
+      setQrText(newQrValue);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
   };
 
   // si qr
