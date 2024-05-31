@@ -1,42 +1,53 @@
 "use client";
 import React from "react";
 
-interface LectureCardClassroomProps {
-  ClassName: string;
-  ClassTime: string;
-  ClassPlace: string;
-  ClassStudentCount: number;
-  ClassMeetings: number;
-  ClassMeetingsStatus: "Sesuai" | "Kurang";
-  ClassGroupCode: string;
+interface LectureCardProps {
+  id: number;
+  kodeMatkul: string;
+  namaMatkul: string;
+  kodeKelompok: string;
+  sks: number;
+  day: string;
+  jumlahMahasiswa: number;
+  timeStart: string;
+  timeEnd: string;
+  classroom: string;
+  dosen: {
+    fullname: string;
+    nip: string;
+  };
 }
 
 const LectureCardClassroom = ({
-  ClassName,
-  ClassTime,
-  ClassPlace,
-  ClassStudentCount,
-  ClassMeetings,
-  ClassMeetingsStatus,
-  ClassGroupCode,
-}: LectureCardClassroomProps) => {
+  kodeMatkul,
+  namaMatkul,
+  kodeKelompok,
+  sks,
+  day,
+  jumlahMahasiswa,
+  timeStart,
+  timeEnd,
+  classroom,
+  dosen,
+}: LectureCardProps) => {
   return (
-    <div className="w-full min-h-[25vh] flex justify-between bg-white shadow-lg p-3 rounded-lg">
+    <div className="w-full min-h-[25vh] flex justify-between shadow-lg p-5 rounded-lg">
       <div className="left-data">
-        <h2 className="font-medium text-xl">{ClassName}</h2>
-        <p className="mt-3">Kode Matkul : {ClassGroupCode}</p>
+        <h2 className="font-medium text-xl">{namaMatkul}</h2>
+        <p className="mt-3">Kode Matkul : {kodeKelompok}</p>
         <p>
-          {ClassTime} | {ClassPlace}
+          {timeStart} - {timeEnd} | {classroom}
         </p>
 
         <div className="flex gap-3">
-          <p>Mahasiswa: {ClassStudentCount}</p>
+          <p>Mahasiswa: {jumlahMahasiswa}</p>
         </div>
       </div>
       <div className="rigt-data text-center ">
-        <p>Week</p>
-        <p> {ClassMeetings}/14</p>
-        <p>{ClassMeetingsStatus}</p>
+        <p>sks</p>
+        {/* <p> {ClassMeetings}/14</p>
+        <p>{ClassMeetingsStatus}</p> */}
+        <p> {sks} </p>
       </div>
     </div>
   );

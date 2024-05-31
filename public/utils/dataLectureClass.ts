@@ -1,4 +1,4 @@
-interface dataLectureClassroom {
+interface dataLecturClass {
   id: string;
   name: string;
   time: string;
@@ -7,9 +7,10 @@ interface dataLectureClassroom {
   meetings: number;
   meetingsStatus: "Sesuai" | "Kurang";
   groupCode: string;
+  sks: number;
 }
 
-const dataLclassroom: dataLectureClassroom[] = [
+const dataLclassroom: dataLecturClass[] = [
   {
     id: "1",
     name: "Pemrograman Web Lanjut",
@@ -19,6 +20,8 @@ const dataLclassroom: dataLectureClassroom[] = [
     meetings: 12,
     meetingsStatus: "Sesuai",
     groupCode: "TI2021A",
+    sks: 4,
+    // bgsession: "#FF8C00",
   },
   {
     id: "2",
@@ -29,6 +32,8 @@ const dataLclassroom: dataLectureClassroom[] = [
     meetings: 10,
     meetingsStatus: "Kurang",
     groupCode: "TI2020B",
+    sks: 4,
+    // bgsession: "#FF8C00",
   },
   {
     id: "3",
@@ -39,6 +44,8 @@ const dataLclassroom: dataLectureClassroom[] = [
     meetings: 14,
     meetingsStatus: "Sesuai",
     groupCode: "TI2019C",
+    sks: 4,
+    // bgsession: "#FF8C00",
   },
   {
     id: "4",
@@ -49,6 +56,8 @@ const dataLclassroom: dataLectureClassroom[] = [
     meetings: 12,
     meetingsStatus: "Sesuai",
     groupCode: "TI2021D",
+    sks: 4,
+    // bgsession: "#FF8C00",
   },
   {
     id: "5",
@@ -59,6 +68,8 @@ const dataLclassroom: dataLectureClassroom[] = [
     meetings: 11,
     meetingsStatus: "Kurang",
     groupCode: "TI2020E",
+    sks: 4,
+    // bgsession: "#FF8C00",
   },
 ];
 

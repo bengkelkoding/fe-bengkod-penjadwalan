@@ -1,34 +1,45 @@
 // components/Login.tsx
 "use client";
 import { useState } from "react";
-
-import users from "../../../public/utils/data";
 import { useRouter } from "next/navigation";
+
+import axios from "axios";
 
 const Login = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [code, setcode] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
+  const handleLogin = async () => {
+    try {
+      // ini axios dapat respon
+      const response = await axios.post(`http://localhost:8000/api/login`, {
+        code,
+        password,
+      });
 
-    if (user) {
-      if (user.role === "lecturer") {
+      // Ambil token dari respons API
+      const token = response.data.access_token;
+
+      // Simpan token ke localStorage
+      localStorage.setItem("token", token);
+
+      // Kalo berhasil
+      // Misalnya, redirect ke halaman dashboard
+      if (response.data.user.type === "DOSEN") {
         router.push("/dashboard/lecture");
-        console.log(user);
-      } else {
+      }
+      if (response.data.user.type === "MAHASISWA") {
         router.push("/dashboard/student");
       }
-    } else {
-      alert("Email atau password salah");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("code atau password salah");
     }
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const handlecodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setcode(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,21 +47,6 @@ const Login = () => {
   };
 
   return (
-    // <div>
-    //   <input
-    //     type="email"
-    //     placeholder="Email"
-    //     value={email}
-    //     onChange={handleEmailChange}
-    //   />
-    //   <input
-    //     type="password"
-    //     placeholder="Password"
-    //     value={password}
-    //     onChange={handlePasswordChange}
-    //   />
-    //   <button onClick={handleLogin}>Login</button>
-    // </div>
     <div className="w-full min-h-full flex-1 flex-col px-5 lg:px-8 h-screen flex items-center justify-center">
       <div className="flex w-full lg:w-1/3  px-6 py-12 flex-col bg-white shadow-lg rounded-lg  ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -68,19 +64,19 @@ const Login = () => {
           <div className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="code"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Email address
+                code address
               </label>
               <div className="mt-2">
                 <input
                   id="email"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  autoComplete="email"
+                  type="text"
+                  placeholder="NIM / NIP"
+                  value={code}
+                  onChange={handlecodeChange}
+                  autoComplete="code"
                   required
                   className="block w-full text- rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
