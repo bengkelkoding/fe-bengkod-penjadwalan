@@ -30,13 +30,7 @@ export default function Page() {
     return payload.reduce((total, item) => total + item.jumlah_mahasiswa, 0);
   };
 
-<<<<<<< HEAD:src/app/dashboard/lecture/page.tsx
-export default function Page() {
   return (
-    // awal dashboard/lecture
-=======
-  return (
->>>>>>> 628834a967e0de58e80aa539ccbae0e6ff38abbe:src/app/dashboard/lecture/page.jsx
     <div className="flex h-full flex-wrap items-center justify-center">
       <div className=" h-auto lg:h-3/4 w-full grid lg:grid-cols-3 lg:grid-rows-2 grid-cols-1 grid-rows-1  gap-5">
         <div className="lg:row-span-2 row-span-1 mx-auto justify-center ">
