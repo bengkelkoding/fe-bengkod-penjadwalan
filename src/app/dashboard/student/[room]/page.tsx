@@ -105,7 +105,7 @@ const ClassDetailPage = () => {
   }
 
   return (
-    <div className="box">
+    <div className="box flex flex-col min-h-screen">
       <ClassDetail
         classId={selectedClass.id}
         className={selectedClass.name}
