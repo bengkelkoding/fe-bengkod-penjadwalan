@@ -1,6 +1,11 @@
 "use client";
+import { ApiLectureSchedule } from "@/app/api/LectureSchedule";
+import { ApiDetailLectureSchedule } from "@/app/api/LectureScheduleDetail";
 import ListTableMhs from "@/app/components/lecture/LectureClass/ListTableMhs";
 import ListTableMhsAbsent from "@/app/components/lecture/LectureClass/ListTableMhsAbsent";
+import { DataLectureClass } from "@/model/ModelLectureCardClass";
+import { DataSessionClass } from "@/model/ModelSessionClass";
+import { useParams } from "next/navigation";
 import { QRCodeSVG } from "qrcode.react";
 import React, { useEffect, useState } from "react";
 
@@ -30,6 +35,55 @@ interface SessionProps {
 }
 
 const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
+  // bikin 1. get api kelas di id params.
+  const { id } = useParams();
+
+  // bandingkan dengan id yang di presence
+  const { session } = useParams();
+
+  // data classRoom
+  const [scheduleData, setScheduleData] = useState<DataLectureClass | null>(
+    null
+  );
+
+  const [dataSession, setDataSession] = useState<
+    DataSessionClass[] | undefined
+  >();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await ApiLectureSchedule();
+        const dataSchedule = data.payload;
+        const dptId = id;
+
+        const element = dataSchedule.find(
+          (element: DataLectureClass) => element.id.toString() == dptId
+        );
+
+        if (element) {
+          setScheduleData(element);
+        }
+
+        const dataDetail = await ApiDetailLectureSchedule(id.toString());
+        const dataPresences = dataDetail.payload.presences;
+        console.log("presen session", dataPresences);
+        setDataSession(dataPresences);
+      } catch (error) {
+        console.error("Error fetching schedules:", error);
+      }
+    };
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (scheduleData) {
+      console.log("final", scheduleData);
+    }
+  }, [scheduleData]);
+
   const [qrText, setQrText] = useState<string>("");
   const [i, setI] = useState<number>(1);
   const [countdown, setCountdown] = useState<number>(20);
@@ -41,6 +95,7 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
     console.log(randomText);
   };
 
+  // si qr
   useEffect(() => {
     let qrTimeout: ReturnType<typeof setTimeout> | undefined;
     let countdownInterval: ReturnType<typeof setInterval> | undefined;
@@ -75,21 +130,25 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
           <div className="profil-cardLecture flex flex-col gap-2 h-[20vh] rounded-lg p-2 bg-gradient-to-r from-[#3263de]  to-[#6aa2f0] ">
             <div className="info-week gap-2 bg-slate-50 rounded-lg w-[80%] lg:w-[45%] flex p-2">
               <div className="rounded-full w-[13%]  bg-orange-300"></div>
-              <h1 className="font-semibold text-2xl">Pertemuan x</h1>
+              <h1 className="font-semibold text-2xl">Pertemuan {session}</h1>
             </div>
             <div className="info-dosen text-white text-lg">
-              <h1 className="font-bold">Muhamad Alif Aj</h1>
-              <h1>A11222</h1>
+              <h1 className="font-bold">{scheduleData?.dosen.fullname}</h1>
+              <h1>{scheduleData?.dosen.nip}</h1>
             </div>
           </div>
           <div className="detail-info flex gap-2">
             <div className="info-izin rounded-lg w-full flex items-center flex-col bg-[#baf8db] p-2 ">
-              <p className="font-bold text-4xl text-[#3263de]">9</p>
-              <p className="font-medium text-xl text-[#1b2650] ">orang</p>
+              <p className="font-bold text-4xl text-[#3263de]">
+                {scheduleData?.jumlah_mahasiswa}
+              </p>
+              <p className="font-medium text-xl text-[#1b2650] ">
+                Total Mahasiswa
+              </p>
             </div>
             <div className="jml-mhs rounded-lg  w-full flex items-center flex-col bg-yellow-100 p-2 ">
               <p className="font-bold text-4xl text-[#3263de]">9</p>
-              <p className="font-medium text-xl text-[#1b2650] ">orang</p>
+              <p className="font-medium text-xl text-[#1b2650] ">izin</p>
             </div>
           </div>
           <button
