@@ -31,7 +31,6 @@ const RoomDetail = () => {
 
         const dataDetail = await ApiDetailLectureSchedule(id.toString());
         const dataPresences = dataDetail.payload.presences;
-        console.log("presen", dataPresences);
         setDataSession(dataPresences);
         setScheduleData(dataSchedule);
       } catch (error) {
@@ -40,6 +39,7 @@ const RoomDetail = () => {
     };
 
     fetchData();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

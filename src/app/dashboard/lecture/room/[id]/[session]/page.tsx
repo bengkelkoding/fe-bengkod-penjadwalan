@@ -72,14 +72,6 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
 
         // -----------------------
         console.log("1 qr session");
-
-        // const qrGenerateApi = await ApiCreateQrCodeLecture(
-        //   id.toString(),
-        //   session.toString()
-        // );
-        // const dataQr = qrGenerateApi.payload;
-        // const qrValue = dataQr.qr_code;
-        // console.log("qr session", dataQr.qr_code);
       } catch (error) {
         console.error("Error fetching schedules:", error);
       }
