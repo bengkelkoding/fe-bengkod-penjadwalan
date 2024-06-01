@@ -24,7 +24,7 @@ interface CardClassroomProps {
 const CardClassroom: React.FC<CardClassroomProps> = ({ classes }) => {
   return (
     <div className="bg-slate-200 px-4 pt-2 pb-4 mt-8 rounded-3xl">
-      <h2 className="p-2 bg-white -mt-6 mb-4  w-24 rounded-2xl text-center font-semibold text-blue-900 text-sm">Daftar Kelas</h2>
+      <h2 className="p-2 bg-white -mt-6 mb-4 w-28 rounded-2xl text-center font-semibold text-blue-900 text-sm">Daftar Kelas</h2>
       <ul className="grid grid-cols-2 gap-4">
         {classes.map((kelas) => (
           <li className="" key={kelas.id}>
