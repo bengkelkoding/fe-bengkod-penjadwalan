@@ -13,16 +13,18 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       // ini axios dapat respon
-      const response = await axios.post(`http://localhost:8000/api/login`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST_API}api/login`, {
         code,
         password,
       });
 
       // Ambil token dari respons API
       const token = response.data.access_token;
+      const user = response.data.user;
 
       // Simpan token ke localStorage
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       // Kalo berhasil
       // Misalnya, redirect ke halaman dashboard
@@ -55,18 +57,13 @@ const Login = () => {
               <p className="font-medium text-3xl text-center">Jadwalin</p>
             </div>
           </div>
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
-          </h2>
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <div className="space-y-6">
             <div>
-              <label
-                htmlFor="code"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="code" className="block text-sm font-medium leading-6 text-gray-900">
                 code address
               </label>
               <div className="mt-2">
@@ -85,17 +82,11 @@ const Login = () => {
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Password
                 </label>
                 <div className="text-sm">
-                  <a
-                    href="/not-found"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
+                  <a href="/not-found" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Forgot password?
                   </a>
                 </div>

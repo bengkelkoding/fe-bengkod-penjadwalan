@@ -1,5 +1,5 @@
-import React from "react";
-
+"use client";
+import React, { useState } from "react";
 import ButtomNavigation from "@/app/components/ButtomNavigation";
 
 export default function DashboardPage() {
