@@ -176,7 +176,7 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
           <div className="detail-info flex gap-2">
             <div className="info-izin rounded-lg w-full flex items-center flex-col bg-[#baf8db] p-2 ">
               <p className="font-bold text-4xl text-[#3263de]">
-                {dataMhsList?.length}
+                {scheduleData?.jumlah_mahasiswa}
               </p>
               <p className="font-medium text-xl text-[#1b2650] ">
                 Total Mahasiswa
@@ -229,9 +229,9 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>

@@ -3,8 +3,8 @@ import React, { useState } from "react";
 // import CardProfile from "../components/CardProfile";
 // import CardClassroom from "../components/CardClassroom";
 // import ButtomNavigation from "../components/ButtomNavigation";
-import CardIzin from "@/app/components/CardIzin";
-import CardRiwayat from "@/app/components/CardRiwayat";
+import CardIzin from "@/app/components/student/CardIzin";
+import CardRiwayat from "@/app/components/student/CardRiwayat";
 import ButtomNavigation from "@/app/components/ButtomNavigation";
 
 type StatusType = "Absent" | "Hadir" | "Izin";
