@@ -2,6 +2,7 @@ import axios from "axios";
 interface Data {
   id: string;
   payload: {
+    students: any;
     presences: any[];
   };
 }

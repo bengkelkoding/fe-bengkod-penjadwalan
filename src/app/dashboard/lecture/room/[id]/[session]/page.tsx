@@ -9,6 +9,8 @@ import { DataSessionClass } from "@/model/ModelSessionClass";
 import { useParams } from "next/navigation";
 import { QRCodeSVG } from "qrcode.react";
 import React, { useEffect, useState } from "react";
+import MhsList from "../../../../../../../public/utils/dataMhsList";
+import { useRouter } from "next/router";
 
 /*
 
@@ -39,11 +41,29 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
   // get url information
   const { id } = useParams();
   const { session } = useParams();
+  const rounter = useRouter;
+  const [sessionData, setSessionData] = useState<
+    DataSessionClass[] | undefined
+  >();
+
+  useEffect(() => {
+    const session = localStorage.getItem("currentSession");
+    if (session) {
+      setSessionData(JSON.parse(session));
+    }
+    // console.log("berhasilaaa", session); // Memperbaiki sesi yang diambil
+  }, []); //
 
   // data classRoom
-  const [scheduleData, setScheduleData] = useState<DataLectureClass | null>(null);
+  const [scheduleData, setScheduleData] = useState<DataLectureClass | null>(
+    null
+  );
 
-  const [dataSession, setDataSession] = useState<DataSessionClass[] | undefined>();
+  const [dataSession, setDataSession] = useState<
+    DataSessionClass[] | undefined
+  >();
+
+  const [dataMhsList, setDataMhsList] = useState<MhsList[] | undefined>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +72,9 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
         const dataSchedule = data.payload;
         const dptId = id;
 
-        const element = dataSchedule.find((element: DataLectureClass) => element.id.toString() == dptId);
+        const element = dataSchedule.find(
+          (element: DataLectureClass) => element.id.toString() == dptId
+        );
 
         if (element) {
           setScheduleData(element);
@@ -65,7 +87,9 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
         setDataSession(dataPresences);
 
         // -----------------------
-        console.log("1 qr session");
+
+        const dataMhs = dataDetail.payload.students;
+        setDataMhsList(dataMhs);
       } catch (error) {
         console.error("Error fetching schedules:", error);
       }
@@ -91,7 +115,10 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
 
   const generateRandomText = async () => {
     try {
-      const qrGenerateApi = await ApiCreateQrCodeLecture(id.toString(), session.toString());
+      const qrGenerateApi = await ApiCreateQrCodeLecture(
+        id.toString(),
+        session.toString()
+      );
       const dataQr = qrGenerateApi.payload;
       const newQrValue = dataQr.qr_code;
       console.log("qr session", newQrValue);
@@ -107,7 +134,7 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
     let countdownInterval: ReturnType<typeof setInterval> | undefined;
 
     if (qrText) {
-      setCountdown(20); // Reset countdown ke 20
+      setCountdown(5); // Reset countdown ke 20
 
       countdownInterval = setInterval(() => {
         setCountdown((prevCount) => prevCount - 1);
@@ -116,11 +143,12 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
       qrTimeout = setTimeout(() => {
         setQrText("");
         clearInterval(countdownInterval); // Menghentikan interval setelah QR Code hilang
-      }, 20000);
+      }, 5000);
     }
     return () => {
       if (qrTimeout) {
         clearTimeout(qrTimeout);
+        window.location.reload();
       }
       if (countdownInterval) {
         clearInterval(countdownInterval);
@@ -136,7 +164,9 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
           <div className="profil-cardLecture flex flex-col gap-2 h-[20vh] rounded-lg p-2 bg-gradient-to-r from-[#3263de]  to-[#6aa2f0] ">
             <div className="info-week gap-2 bg-slate-50 rounded-lg w-[80%] lg:w-[45%] flex p-2">
               <div className="rounded-full w-[13%]  bg-orange-300"></div>
-              <h1 className="font-semibold text-2xl">Pertemuan {session}</h1>
+              <h1 className="font-semibold text-2xl">
+                Pertemuan {sessionData?.week}
+              </h1>
             </div>
             <div className="info-dosen text-white text-lg">
               <h1 className="font-bold">{scheduleData?.dosen.fullname}</h1>
@@ -145,15 +175,22 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
           </div>
           <div className="detail-info flex gap-2">
             <div className="info-izin rounded-lg w-full flex items-center flex-col bg-[#baf8db] p-2 ">
-              <p className="font-bold text-4xl text-[#3263de]">{scheduleData?.jumlah_mahasiswa}</p>
-              <p className="font-medium text-xl text-[#1b2650] ">Total Mahasiswa</p>
+              <p className="font-bold text-4xl text-[#3263de]">
+                {scheduleData?.jumlah_mahasiswa}
+              </p>
+              <p className="font-medium text-xl text-[#1b2650] ">
+                Total Mahasiswa
+              </p>
             </div>
             <div className="jml-mhs rounded-lg  w-full flex items-center flex-col bg-yellow-100 p-2 ">
               <p className="font-bold text-4xl text-[#3263de]">9</p>
               <p className="font-medium text-xl text-[#1b2650] ">izin</p>
             </div>
           </div>
-          <button className="btn-generate  w-1/4  mt-5 p-3 font-semibold text-white border-2 border-slate-200 bg-[#4780ea] 4780ea hover:bg-[#3263de] rounded-lg" onClick={generateRandomText}>
+          <button
+            className="btn-generate  w-1/4  mt-5 p-3 font-semibold text-white border-2 border-slate-200 bg-[#4780ea] 4780ea hover:bg-[#3263de] rounded-lg"
+            onClick={generateRandomText}
+          >
             Genetate Qr
           </button>
         </div>
@@ -164,7 +201,9 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
               {qrText ? (
                 <div className="w-full">
                   <QRCodeSVG className="w-full" height={300} value={qrText} />
-                  <p className="pt-5 text-center">QR Code akan hilang dalam {countdown} detik</p>
+                  <p className="pt-5 text-center">
+                    QR Code akan hilang dalam {countdown} detik
+                  </p>
                 </div>
               ) : (
                 <p>QR Code belum dihasilkan</p>
@@ -181,8 +220,20 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
             <label className="sr-only">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                <svg
+                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
                 </svg>
               </div>
               <input
@@ -202,7 +253,8 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
                 <p className="bg-yellow-200 p-1 w-3/12 rounded-lg">List mhs</p>
               </div>
             </div>
-            <ListTableMhs />
+            {/* kirimkan data userList dari sini kedalam table */}
+            {dataMhsList && <ListTableMhs dataListMhs={dataMhsList} />}
           </div>
           <div className="right-sudahabsen w-full lg:w-1/2">
             <div className="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 p-3 bg-white dark:bg-gray-900">
