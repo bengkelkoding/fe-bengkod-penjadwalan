@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import CardRoom from "./CardRoom";
-import ButtomNavigation from "./ButtomNavigation";
+import ButtomNavigation from "../ButtomNavigation";
 import { DataStudentSchedule } from "@/model/ModelStudentSchedule";
 
 interface CardClassroomProps {

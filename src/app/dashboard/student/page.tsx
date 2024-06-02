@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 // import CardProfile from "../components/CardProfile";
 // import CardClassroom from "../components/CardClassroom";
 // import ButtomNavigation from "../components/ButtomNavigation";
-import CardProfile from "@/app/components/CardProfile";
-import CardClassroom from "@/app/components/CardClassroom";
+import CardProfile from "@/app/components/student/CardProfile";
+import CardClassroom from "@/app/components/student/CardClassroom";
 import ButtomNavigation from "@/app/components/ButtomNavigation";
 import useGetStudentSchedule from "@/app/api/StudentSchedule";
 
