@@ -8,11 +8,10 @@ interface CardRoomProps {
   group_code: string;
   sks: number;
   LectureName: string;
-  LectureNip: number;
-  LecturePhone: string;
+  LectureNip: string;
 }
 
-const CardRoom: React.FC<CardRoomProps> = ({ className, classPlace, classDay, classTime, group_code, sks, LectureName, LectureNip, LecturePhone }) => {
+const CardRoom: React.FC<CardRoomProps> = ({ className, classPlace, classDay, classTime, group_code, sks }) => {
   return (
     <div className="w-full h-40 rounded-3xl hover:bg-blue-900  duration-300 group bg-white text-white flex flex-col shadow-md ">
       {/* hari */}

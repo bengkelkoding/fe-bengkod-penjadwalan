@@ -3,22 +3,10 @@ import Link from "next/link";
 import React from "react";
 import CardRoom from "./CardRoom";
 import ButtomNavigation from "./ButtomNavigation";
-
-interface ClassData {
-  id: string;
-  name: string;
-  place: string;
-  day: string;
-  time: string;
-  group_code: string;
-  sks: number;
-  LectureName: string;
-  LectureNip: number;
-  LecturePhone: string;
-}
+import { DataStudentSchedule } from "@/model/ModelStudentSchedule";
 
 interface CardClassroomProps {
-  classes: ClassData[];
+  classes: DataStudentSchedule[];
 }
 
 const CardClassroom: React.FC<CardClassroomProps> = ({ classes }) => {
@@ -31,15 +19,14 @@ const CardClassroom: React.FC<CardClassroomProps> = ({ classes }) => {
             <Link href={`/dashboard/student/${kelas.id}`}>
               {/* card room */}
               <CardRoom
-                className={kelas.name}
-                classPlace={kelas.place}
+                className={kelas.nama_matkul}
+                classPlace={kelas.classroom}
                 classDay={kelas.day}
-                classTime={kelas.time}
-                group_code={kelas.group_code}
+                classTime={kelas.time_start}
+                group_code={kelas.kode_kelompok}
                 sks={kelas.sks}
-                LectureName={kelas.LectureName}
-                LectureNip={kelas.LectureNip}
-                LecturePhone={kelas.LecturePhone}
+                LectureName={kelas.dosen.fullname}
+                LectureNip={kelas.dosen.nip}
               />
             </Link>
           </li>

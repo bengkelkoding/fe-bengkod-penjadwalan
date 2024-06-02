@@ -1,15 +1,16 @@
 import React from "react";
 import CardLecture from "./CardLecture";
+import { Presence } from "@/model/ModelStudentScheduleDetail";
 
 interface ClassDetailProps {
-  classId: string;
-  className: string;
-  classLecture: string;
-  classNip: number;
-  classLecturePhone: string;
+  classId?: number;
+  className?: string;
+  classLecture?: string;
+  classNip?: string;
+  presence?: Presence[];
 }
 
-const ClassDetail: React.FC<ClassDetailProps> = ({ classId, className, classLecture, classNip, classLecturePhone }) => {
+const ClassDetail: React.FC<ClassDetailProps> = ({ classId, className, classLecture, classNip, presence }) => {
   console.log(classId);
   return (
     <div className="px-4 bg-slate-300 w-full h-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
@@ -18,7 +19,7 @@ const ClassDetail: React.FC<ClassDetailProps> = ({ classId, className, classLect
           <p className=" font-extralight rounded-br-[15px] rounded-bl-[15px] bg-blue-900 text-white text-2xl pt-2 pb-12 px-8 -mx-4">Detail Course</p>
           {/* profil dosen */}
           <div className=""></div>
-          <CardLecture ClassName={className} LectureName={classLecture} LectureNip={classNip} LecturePhone={classLecturePhone} />
+          <CardLecture ClassName={className} LectureName={classLecture} LectureNip={classNip} />
 
           <div className="bg-white px-4 pt-2 pb-4 mt-8 rounded-3xl">
             <div className="flex justify-center">
@@ -68,41 +69,20 @@ const ClassDetail: React.FC<ClassDetailProps> = ({ classId, className, classLect
           </div>
 
           <div className="bg-slate-200 px-4 pt-2 pb-4 mt-8 rounded-3xl mb-[100px]">
-            <div className="flex justify-between  mt-4 bg-white rounded-2xl">
-              <div className="px-3 py-2">
-                <p className="font-semibold text-blue-900 text-sm">Pertemuan ke-1</p>
-                <p className="text-blue-900 text-[13.5px]">12 April 2022</p>
-                <p className="text-blue-900 text-[13.5px] -mt-1">12.00 - 14.00</p>
-              </div>
+            {presence?.map((i) => (
+              <div key={i.id}>
+                <div className="flex justify-between  mt-4 bg-white rounded-2xl">
+                  <div className="px-3 py-2">
+                    <p className="font-semibold text-blue-900 text-sm">Pertemuan ke-{i.week}</p>
+                    <p className="text-blue-900 text-[13.5px]">{i.presence_date}</p>
+                  </div>
 
-              <div className="font-semibold text-sm text-center rounded-xl   text-white ">
-                <p className="bg-green-500 px-3 py-2  rounded-tr-xl rounded-bl-xl rounded-sm">Hadir</p>
+                  <div className="font-semibold text-sm text-center rounded-xl   text-white ">
+                    <p className="bg-green-500 px-3 py-2  rounded-tr-xl rounded-bl-xl rounded-sm">{i.status_label}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="flex justify-between  mt-4 bg-white rounded-2xl">
-              <div className="px-3 py-2">
-                <p className="font-semibold text-blue-900 text-sm">Pertemuan ke-2</p>
-                <p className="text-blue-900 text-[13.5px]">12 April 2022</p>
-                <p className="text-blue-900 text-[13.5px] -mt-1">12.00 - 14.00</p>
-              </div>
-
-              <div className="font-semibold text-sm   text-center rounded-xl  text-white">
-                <p className="bg-orange-500 px-3 py-2  rounded-tr-xl rounded-bl-xl  rounded-sm">Izin</p>
-              </div>
-            </div>
-
-            <div className="flex justify-between mt-4 bg-white rounded-2xl">
-              <div className="px-3 py-2">
-                <p className="font-semibold text-blue-900 text-sm">Pertemuan ke-3</p>
-                <p className="text-blue-900 text-[13.5px]">12 April 2022</p>
-                <p className="text-blue-900 text-[13.5px] -mt-1">12.00 - 14.00</p>
-              </div>
-
-              <div className="font-semibold text-sm text-center rounded-xl text-white ">
-                <p className="bg-red-500 px-3 py-2 rounded-tr-xl rounded-bl-xl rounded-sm">Absent</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

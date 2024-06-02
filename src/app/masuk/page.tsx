@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import axios from "axios";
+import axios from "@/utils/axios";
 
 const Login = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       // ini axios dapat respon
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_HOST_API}api/login`, {
+      const response = await axios.post("login", {
         code,
         password,
       });
@@ -21,6 +21,7 @@ const Login = () => {
       // Ambil token dari respons API
       const token = response.data.access_token;
       const user = response.data.user;
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       // Simpan token ke localStorage
       localStorage.setItem("token", token);
