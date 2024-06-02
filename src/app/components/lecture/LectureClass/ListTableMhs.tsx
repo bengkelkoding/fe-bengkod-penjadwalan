@@ -1,427 +1,216 @@
-import React from "react";
+import React, { useState } from "react";
+import MhsList from "../../../../../public/utils/dataMhsList";
 
-export default function ListTableMhs() {
+interface MhsListProps {
+  dataListMhs: MhsList[];
+}
+const ListTableMhs: React.FC<MhsListProps> = ({ dataListMhs }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortedData, setSortedData] = useState<MhsList[]>(dataListMhs);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const sortData = () => {
+    const sorted = [...dataListMhs].sort((a, b) => {
+      const nameA = a.user.fullname.toLowerCase();
+      const nameB = b.user.fullname.toLowerCase();
+      if (nameA < nameB) return sortOrder === "asc" ? -1 : 1;
+      if (nameA > nameB) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+    setSortedData(sorted);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const renderPagination = () => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li key={i}>
+          <a
+            href="#"
+            className={`flex items-center justify-center px-4 h-10 leading-tight ${
+              i === currentPage
+                ? "z-10 text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(i);
+            }}
+          >
+            {i}
+          </a>
+        </li>
+      );
+    }
+
+    return (
+      <nav aria-label="Page navigation example">
+        <ul className="flex items-center -space-x-px h-10 text-base">
+          <li>
+            <a
+              href="#"
+              className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(currentPage > 1 ? currentPage - 1 : 1);
+              }}
+            >
+              <span className="sr-only">Previous</span>
+              <svg
+                className="w-3 h-3 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 6 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 1 1 5l4 4"
+                />
+              </svg>
+            </a>
+          </li>
+          {pageNumbers}
+          <li>
+            <a
+              href="#"
+              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              onClick={(e) => {
+                e.preventDefault();
+                handlePageChange(
+                  currentPage < totalPages ? currentPage + 1 : totalPages
+                );
+              }}
+            >
+              <span className="sr-only">Next</span>
+              <svg
+                className="w-3 h-3 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 6 10"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 9 4-4-4-4"
+                />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
   return (
-    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-all-search"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Name
-            </th>
-            <th scope="col" className="px-6 py-3">
-              NIM
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-1"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-2 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {/* <img
-                      className="w-10 h-10 rounded-full"
-                      src="/docs/images/people/profile-picture-1.jpg"
-                      alt="Jese image"
-                    ></img> */}
-              <div className="ps-3">
-                <div className="text-base font-semibold">Neil Sims</div>
-                <div className="font-normal text-gray-500">
-                  neil.sims@flowbite.com
+    <div>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="p-4">
+                <div className="flex items-center">
+                  <input
+                    id="checkbox-all-search"
+                    type="checkbox"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label className="sr-only">checkbox</label>
                 </div>
-              </div>
-            </th>
-            <td className="px-2 py-4">A11.2021.13717</td>
-            <td className="px-2 py-4">
-              <div className="flex items-center">
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                Hadir
-              </div>
-            </td>
-            <td className="px-2 py-4">
-              {/* <!-- Modal toggle --> */}
-              <a
-                href="#"
-                type="button"
-                data-modal-target="editUserModal"
-                data-modal-show="editUserModal"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              </th>
+              <th scope="col" className="px-6 py-3">
+                <div className="flex items-center">
+                  Name
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      sortData();
+                    }}
+                  >
+                    <svg
+                      className="w-3 h-3 ms-1.5"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                    </svg>
+                  </a>
+                </div>
+              </th>
+              <th scope="col" className="px-6 py-3">
+                NIM
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems.map((mhs) => (
+              <tr
+                key={mhs.user.id}
+                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
-                Hadir
-              </a>
-            </td>
-          </tr>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-2"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {/* <img
-                      className="w-10 h-10 rounded-full"
-                      src="/docs/images/people/profile-picture-3.jpg"
-                      alt="Jese image"
-                    ></img> */}
-              <div className="ps-3">
-                <div className="text-base font-semibold">Bonnie Green</div>
-                <div className="font-normal text-gray-500">
-                  bonnie@flowbite.com
-                </div>
-              </div>
-            </th>
-            <td className="px-2 py-4">Designer</td>
-            <td className="px-2 py-4">
-              <div className="flex items-center">
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                Hadir
-              </div>
-            </td>
-            <td className="px-2 py-4">
-              {/* <!-- Modal toggle --> */}
-              <a
-                href="#"
-                type="button"
-                data-modal-show="editUserModal"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit user
-              </a>
-            </td>
-          </tr>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-2"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {/* <img
-                      className="w-10 h-10 rounded-full"
-                      src="/docs/images/people/profile-picture-2.jpg"
-                      alt="Jese image"
-                    ></img> */}
-              <div className="ps-3">
-                <div className="text-base font-semibold">Jese Leos</div>
-                <div className="font-normal text-gray-500">
-                  jese@flowbite.com
-                </div>
-              </div>
-            </th>
-            <td className="px-2 py-4">Vue JS Developer</td>
-            <td className="px-2 py-4">
-              <div className="flex items-center">
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                Hadir
-              </div>
-            </td>
-            <td className="px-2 py-4">
-              {/* <!-- Modal toggle --> */}
-              <a
-                href="#"
-                type="button"
-                data-modal-show="editUserModal"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit user
-              </a>
-            </td>
-          </tr>
-          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-2"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {/* <img
-                      className="w-10 h-10 rounded-full"
-                      src="/docs/images/people/profile-picture-5.jpg"
-                      alt="Jese image"
-                    ></img> */}
-              <div className="ps-3">
-                <div className="text-base font-semibold">Thomas Lean</div>
-                <div className="font-normal text-gray-500">
-                  thomes@flowbite.com
-                </div>
-              </div>
-            </th>
-            <td className="px-2 py-4">UI/UX Engineer</td>
-            <td className="px-2 py-4">
-              <div className="flex items-center">
-                <div className="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>{" "}
-                Hadir
-              </div>
-            </td>
-            <td className="px-2 py-4">
-              {/* <!-- Modal toggle --> */}
-              <a
-                href="#"
-                type="button"
-                data-modal-show="editUserModal"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit user
-              </a>
-            </td>
-          </tr>
-          <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-table-search-3"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <label className="sr-only">checkbox</label>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {/* <img
-                      className="w-10 h-10 rounded-full"
-                      src="/docs/images/people/profile-picture-4.jpg"
-                      alt="Jese image"
-                    ></img> */}
-              <div className="ps-3">
-                <div className="text-base font-semibold">Leslie Livingston</div>
-                <div className="font-normal text-gray-500">
-                  leslie@flowbite.com
-                </div>
-              </div>
-            </th>
-            <td className="px-2 py-4">SEO Specialist</td>
-            <td className="px-2 py-4">
-              <div className="flex items-center">
-                <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
-                Tidak Hadir
-              </div>
-            </td>
-            <td className="px-2 py-4">
-              {/* <!-- Modal toggle --> */}
-              <a
-                href="#"
-                type="button"
-                data-modal-show="editUserModal"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit user
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      {/* <!-- Edit user modal --> */}
-      <div
-        id="editUserModal"
-        aria-hidden="true"
-        className="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-      >
-        <div className="relative w-full max-w-2xl max-h-full">
-          {/* <!-- Modal content --> */}
-          <form className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            {/* <!-- Modal header --> */}
-            <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Edit user
-              </h3>
-              <button
-                type="button"
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-hide="editUserModal"
-              >
-                <svg
-                  className="w-3 h-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-                <span className="sr-only">Close modal</span>
-              </button>
-            </div>
-            {/* <!-- Modal body --> */}
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    name="first-name"
-                    id="first-name"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Bonnie"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    name="last-name"
-                    id="last-name"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Green"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="example@company.com"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Phone Number
-                  </label>
-                  <input
-                    type="number"
-                    name="phone-number"
-                    id="phone-number"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="e.g. +(12)3456 789"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Department
-                  </label>
-                  <input
-                    type="text"
-                    name="department"
-                    id="department"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Development"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Company
-                  </label>
-                  <input
-                    type="number"
-                    name="company"
-                    id="company"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="123456"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Current Password
-                  </label>
-                  <input
-                    type="password"
-                    name="current-password"
-                    id="current-password"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    New Password
-                  </label>
-                  <input
-                    type="password"
-                    name="new-password"
-                    id="new-password"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-            {/* <!-- Modal footer --> */}
-            <div className="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-              <button
-                type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Save all
-              </button>
-            </div>
-          </form>
-        </div>
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input
+                      id="checkbox-table-search-3"
+                      type="checkbox"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label className="sr-only">checkbox</label>
+                  </div>
+                </td>
+                <td className="px-2 py-4 font-semibold">{mhs.user.fullname}</td>
+                <td className="px-2 py-4">{mhs.user.code}</td>
+                <td className="px-2 py-4">
+                  <div className="flex items-center">
+                    <div className="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>{" "}
+                    Tidak Hadir
+                  </div>
+                </td>
+                <td className="px-2 py-4">
+                  <a
+                    href="#"
+                    type="button"
+                    data-modal-show="editUserModal"
+                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  >
+                    Edit user
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      {renderPagination()}
     </div>
   );
-}
+};
+
+export default ListTableMhs;

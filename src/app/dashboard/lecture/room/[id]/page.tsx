@@ -42,7 +42,7 @@ const RoomDetail = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  console.log("lihat", scheduleData);
   const selectedClass: DataLectureClass | undefined = scheduleData?.find(
     (kelas: DataLectureClass) => kelas.id.toString() === id
   );
@@ -56,6 +56,7 @@ const RoomDetail = () => {
   return (
     <div className="flex flex-col gap-5">
       <p className="font-semibold text-4xl">{selectedClass.nama_matkul}</p>
+      {/* <p>{selectedClass.classroom}</p> */}
       <div className="head-info-room grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="box-1 flex items-center justify-center gap-8 p-3 bg-gradient-to-r from-[#3263de]  to-[#6aa2f0] rounded-lg shadow-md w-full h-[20vh]">
           <div className="icon  w-16 h-16 rounded-full flex justify-center items-center">
@@ -133,13 +134,21 @@ const RoomDetail = () => {
       </div>
       List pertemuan
       <div className="list-pertemuan h-[50vh] overflow-auto">
-        <ul className="grid grid-cols-1 gap-4">
+        <ul className="grid grid-cols-1 gap-10">
           {/* ini ganti api nya make detail schedule */}
 
           {dataSession ? (
             dataSession.map((session) => (
               <li className="" key={session.id}>
-                <Link href={`/dashboard/lecture/room/${id}/${session.id}`}>
+                <Link
+                  href={`/dashboard/lecture/room/${id}/${session.id}`}
+                  onClick={() =>
+                    localStorage.setItem(
+                      "currentSession",
+                      JSON.stringify(session)
+                    )
+                  }
+                >
                   <LectureCardSession weekD={session} />
                 </Link>
               </li>

@@ -5,15 +5,16 @@ interface WeekDetail {
     id: number;
     week: number;
     status_label: string;
+    presence_date: string;
   };
 }
 
 const LectureCardSession: React.FC<WeekDetail> = ({ weekD }) => {
   return (
-    <div className="bg-red-100 flex justify-between py-3 px-5 w-full rounded-lg items-center">
+    <div className="shadow-inner flex justify-between py-3 px-5 w-full rounded-lg items-center">
       <div className="info">
-        <p>pertemuan {weekD.week} </p>
-        <p>{weekD.status_label}</p>
+        <p className="text-xl font-semibold">Pertemuan {weekD.week} </p>
+        <p>{weekD.presence_date}</p>
       </div>
       <div className="button">
         <button>click me</button>
