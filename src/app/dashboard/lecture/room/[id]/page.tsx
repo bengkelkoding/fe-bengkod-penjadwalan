@@ -11,6 +11,7 @@ import { ApiLectureSchedule } from "@/app/api/LectureSchedule";
 import { ApiDetailLectureSchedule } from "@/app/api/LectureScheduleDetail";
 import { stringify } from "querystring";
 import { DataSessionClass } from "@/model/ModelSessionClass";
+import LectureCardUnstartSession from "@/app/components/lecture/LectureClass/LectureCardUnstartSesssion";
 
 const RoomDetail = () => {
   const { id } = useParams();
@@ -27,7 +28,6 @@ const RoomDetail = () => {
       try {
         const data = await ApiLectureSchedule();
         const dataSchedule = data.payload;
-        console.log("hasilnya:", dataSchedule);
 
         const dataDetail = await ApiDetailLectureSchedule(id.toString());
         const dataPresences = dataDetail.payload.presences;
@@ -42,7 +42,7 @@ const RoomDetail = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log("lihat", scheduleData);
+  console.log("lihat", dataSession);
   const selectedClass: DataLectureClass | undefined = scheduleData?.find(
     (kelas: DataLectureClass) => kelas.id.toString() === id
   );
@@ -138,21 +138,40 @@ const RoomDetail = () => {
           {/* ini ganti api nya make detail schedule */}
 
           {dataSession ? (
-            dataSession.map((session) => (
-              <li className="" key={session.id}>
-                <Link
-                  href={`/dashboard/lecture/room/${id}/${session.id}`}
-                  onClick={() =>
-                    localStorage.setItem(
-                      "currentSession",
-                      JSON.stringify(session)
-                    )
-                  }
-                >
-                  <LectureCardSession weekD={session} />
-                </Link>
-              </li>
-            ))
+            dataSession.map((session) => {
+              // ubah jadi today agar nampak yang hari ini || date setelah sesi yang boleh masuk ke link
+              const today = new Date("2024-06-20");
+              const presenceDate = new Date(session.presence_date);
+
+              return (
+                <li className="" key={session.id}>
+                  {presenceDate <= today ? (
+                    <Link
+                      href={`/dashboard/lecture/room/${id}/${session.id}`}
+                      onClick={() =>
+                        localStorage.setItem(
+                          "currentSession",
+                          JSON.stringify(session)
+                        )
+                      }
+                    >
+                      <LectureCardSession
+                        weekD={session}
+                        start={selectedClass.time_start}
+                        end={selectedClass.time_end}
+                        classroom={selectedClass.classroom}
+                      />
+                    </Link>
+                  ) : (
+                    <LectureCardUnstartSession
+                      weekD={session}
+                      start={selectedClass.time_start}
+                      end={selectedClass.time_end}
+                    />
+                  )}
+                </li>
+              );
+            })
           ) : (
             <p>loading</p>
           )}
