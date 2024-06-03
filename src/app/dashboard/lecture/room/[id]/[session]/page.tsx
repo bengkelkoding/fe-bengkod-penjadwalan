@@ -12,32 +12,7 @@ import React, { useEffect, useState } from "react";
 import MhsList from "../../../../../../../public/utils/dataMhsList";
 import { useRouter } from "next/router";
 
-/*
-
-  1. perlu data mahasiswa yang mengambil kelas ini.
-
-*/
-
-interface SessionProps {
-  ListMhs: {
-    id: string;
-    name: string;
-    attendance: boolean;
-  }[];
-  DetailClass: {
-    id: string;
-    name: string;
-    time: string;
-    place: string;
-    studentCount: number;
-    meetings: number;
-    meetingsStatus: "Sesuai" | "Kurang";
-    groupCode: string;
-    sks: number;
-  };
-}
-
-const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
+const Session = () => {
   // get url information
   const { id } = useParams();
   const { session } = useParams();
@@ -134,7 +109,7 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
     let countdownInterval: ReturnType<typeof setInterval> | undefined;
 
     if (qrText) {
-      setCountdown(5); // Reset countdown ke 20
+      setCountdown(25); // Reset countdown ke 20
 
       countdownInterval = setInterval(() => {
         setCountdown((prevCount) => prevCount - 1);
@@ -143,7 +118,7 @@ const Session: React.FC<SessionProps> = ({ ListMhs, DetailClass }) => {
       qrTimeout = setTimeout(() => {
         setQrText("");
         clearInterval(countdownInterval); // Menghentikan interval setelah QR Code hilang
-      }, 5000);
+      }, 25000);
     }
     return () => {
       if (qrTimeout) {

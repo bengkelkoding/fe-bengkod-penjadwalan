@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import QrScanner from "qr-scanner";
 import ButtomNavigation from "@/app/components/ButtomNavigation";
+import useSendResultScan from "@/app/api/ScanStudent";
 import Link from "next/link";
 
 export default function DashboardPage() {
   const [btnScan, setBtnScan] = useState(false);
   const [scanner, setScanner] = useState<QrScanner | null>(null);
+  const { statusSend, sendResultScan } = useSendResultScan();
 
   const stopCamera = () => {
     const videoElement = document.getElementById("scanView") as HTMLVideoElement | null;
@@ -20,6 +22,19 @@ export default function DashboardPage() {
       console.log("Camera stopped.");
     }
   };
+
+  const submitResultScan = useCallback(
+    async (code: string) => {
+      console.log("Hasil Scan: ", code);
+      if (code) {
+        setBtnScan(false);
+        setScanner(null);
+        stopCamera();
+        await sendResultScan(code);
+      }
+    },
+    [sendResultScan]
+  );
 
   const scanNow = useCallback(
     async (isScan: boolean) => {
@@ -44,12 +59,9 @@ export default function DashboardPage() {
           const newScanner = new QrScanner(
             videoElement,
             (result) => {
-              console.log("Hasil Scan: ", result.data);
-              setBtnScan(false);
               newScanner.stop();
               newScanner.destroy();
-              setScanner(null);
-              stopCamera();
+              submitResultScan(result.data);
             },
             {
               onDecodeError: (error) => {
@@ -69,7 +81,7 @@ export default function DashboardPage() {
         }
       }
     },
-    [scanner]
+    [scanner, submitResultScan]
   );
 
   useEffect(() => {
@@ -111,6 +123,14 @@ export default function DashboardPage() {
       };
     }
   }, [btnScan, scanNow]);
+
+  useEffect(() => {
+    if (statusSend === 200) {
+      console.log("success");
+    } else {
+      console.log("failed");
+    }
+  }, [statusSend]);
 
   return (
     <div className="flex flex-col min-h-screen px-4 pb-24 bg-slate-300 w-full sm:w-auto md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">

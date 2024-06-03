@@ -11,7 +11,6 @@ interface ClassDetailProps {
 }
 
 const ClassDetail: React.FC<ClassDetailProps> = ({ classId, className, classLecture, classNip, presence }) => {
-  console.log(classId);
   return (
     <div className="px-4 bg-slate-300 w-full h-full sm:w-auto  md:w-1/2 lg:w-1/3 xl:w-1/4 mx-auto">
       <div className="">
